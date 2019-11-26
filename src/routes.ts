@@ -1,5 +1,6 @@
 import {UserController} from "./controller/UserController";
 import {CardInfoController} from "./controller/CardInfoController";
+import {FlightPathController} from "./controller/FlightPathController"
 
 export const Routes = [{
     method: "get",
@@ -23,12 +24,17 @@ export const Routes = [{
     action: "remove"
 }, {
     method: "get",
-    route: "/cardInfo/:cardNumber",
+    route: "/cardinfo/:cardNumber",
     controller: CardInfoController,
     action: "one"
 }, {
     method: "get",
     route: "/cardInfo",
     controller: CardInfoController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/flightpath",
+    controller: FlightPathController,
     action: "all"
 }];
