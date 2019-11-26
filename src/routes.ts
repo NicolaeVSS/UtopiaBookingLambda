@@ -1,8 +1,10 @@
 import {UserController} from "./controller/UserController";
 import {CardInfoController} from "./controller/CardInfoController";
 import {FlightPathController} from "./controller/FlightPathController"
+import { FlightController } from "./controller/FlightController";
 
 export const Routes = [{
+    // USER MAPPINGS
     method: "get",
     route: "/user",
     controller: UserController,
@@ -22,7 +24,7 @@ export const Routes = [{
     route: "/user/:id",
     controller: UserController,
     action: "remove"
-}, {
+}, { // CREDIT MAPPINGS 
     method: "get",
     route: "/cardinfo/:cardNumber",
     controller: CardInfoController,
@@ -32,9 +34,14 @@ export const Routes = [{
     route: "/cardInfo",
     controller: CardInfoController,
     action: "all"
-}, {
+}, { // FLIGHTPATH MAPPINGS
     method: "get",
     route: "/flightpath",
     controller: FlightPathController,
+    action: "all"
+}, { // FLIGHT MAPPINGS
+    method: "get",
+    route: "/flight",
+    controller: FlightController,
     action: "all"
 }];
