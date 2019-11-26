@@ -16,6 +16,7 @@ export class CardInfo {
     @Column({length: 45})
     cardHolderName: string;
     
+    // one card info for many users
     @OneToMany(type => User, user => user.cardInfo, {onDelete:'CASCADE',onUpdate:'CASCADE'})
     users: User[];
 }

@@ -24,7 +24,7 @@ export const Routes = [{
     route: "/user/:id",
     controller: UserController,
     action: "remove"
-}, { // CREDIT MAPPINGS 
+}, { // CARD INFO MAPPINGS 
     method: "get",
     route: "/cardinfo/:cardNumber",
     controller: CardInfoController,

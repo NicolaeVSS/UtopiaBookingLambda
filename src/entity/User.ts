@@ -1,12 +1,14 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany} from "typeorm";
 import {CardInfo} from "./CardInfo";
+import { Booking } from "./Booking";
 
-@Entity()
+@Entity({name:'user'})
 export class User {
 
     @PrimaryGeneratedColumn()
     userId: number;
 
+    // Many cards for one user
     @ManyToOne(type => CardInfo, cardInfo => cardInfo.users, {eager:true, onDelete:'CASCADE',onUpdate:'CASCADE'})
     @JoinColumn({ name: "cardNumber" })
     cardInfo: CardInfo;
@@ -25,5 +27,9 @@ export class User {
 
     @Column({length: 45})
     email: string;
+
+    // one user for many bookings 
+    @OneToMany(type => Booking, booking => booking.bookingId, {onDelete:'CASCADE',onUpdate:'CASCADE'})
+    bookings: Booking[];
 
 }

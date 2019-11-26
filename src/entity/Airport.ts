@@ -16,10 +16,12 @@ export class Airport {
     @Column()
     zip: string;
     
+    // one airport for many flight paths
     // TODO bad?
     @OneToMany(type => FlightPath, (flightPath) => flightPath.srcAirport, {onDelete:'CASCADE', onUpdate:'CASCADE'})
     destFlightPaths: FlightPath[];
     
+    // one airport for many flight paths
     // TODO bad?
     @OneToMany(type => FlightPath, (flightPath) => flightPath.destAirport, {onDelete:'CASCADE', onUpdate:'CASCADE'})
     srcFlightPaths: FlightPath[];
