@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne, CreateDateColumn} from "typeorm";
 import { User } from "./User";
 import { Ticket } from "./Ticket";
 
@@ -13,9 +13,10 @@ export class Booking {
     @JoinColumn({ name: "userId" })
     user: User;
 
-    // one booking has many tickets, this is an associative entity.
-    @ManyToOne(type => Ticket, ticket => ticket.ticketId, {eager:true, onDelete:'CASCADE',onUpdate:'CASCADE'})
-    @JoinColumn({ name: "ticketId" })
-    ticket:Ticket;
+    @Column({width:1})
+    isPaid: number;
+
+    @CreateDateColumn({ type: 'datetime', default: () => 'LOCALTIMESTAMP' })
+    createDate: string;
 
 }
