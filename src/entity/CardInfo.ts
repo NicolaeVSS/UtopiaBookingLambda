@@ -5,7 +5,6 @@ import { User } from '../entity/User'
 export class CardInfo {
 
     @PrimaryColumn({length: 16, nullable:false})
-    @JoinColumn()
     cardNumber: string;
 
     @Column({type:'date'})
