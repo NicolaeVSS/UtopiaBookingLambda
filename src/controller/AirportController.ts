@@ -11,18 +11,15 @@ export class AirportController {
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        let airportPromise = this.airportRepository.findOne();
 
-        airportPromise.catch((err)=>{
-            response.status(404).json("not found");
-        });
-
-        airportPromise.then((res) => {
-            console.log(res)
-            response.status(200).json("found")
+        return this.airportRepository.findOneOrFail(request.params.airportCode)
+        .then((resolve) => {
+            response.status(200).json(resolve);
         })
-
-        return response;
+        .catch((reject) => {
+            // console.log(reject);
+            response.status(404).json();
+        });
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
@@ -30,8 +27,14 @@ export class AirportController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let airportToRemove = await this.airportRepository.findOne(request.params.id);
-        await this.airportRepository.remove(airportToRemove);
+        return this.airportRepository.findOneOrFail(request.params.airportCode)
+        .then((resolve) => {
+            this.airportRepository.remove(resolve);
+            response.status(204).json();
+        })
+        .catch((reject) => {
+            // console.log(reject);
+            response.status(404).json();
+        });
     }
-
 }
