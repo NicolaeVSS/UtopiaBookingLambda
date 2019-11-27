@@ -59,9 +59,9 @@ export const Routes = [{
     route: "/flightpath",
     controller: FlightPathController,
     action: "save"
-},{
-    method: "delete/:flightPathId",
-    route: "/flightpath",
+}, {
+    method: "delete",
+    route: "/flightpath/:flightPathId",
     controller: FlightPathController,
     action: "remove"
 }, { // FLIGHT MAPPINGS

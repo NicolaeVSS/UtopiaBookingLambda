@@ -1,6 +1,5 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne, CreateDateColumn} from "typeorm";
 import { User } from "./User";
-import { Ticket } from "./Ticket";
 
 @Entity({name:'booking'})
 export class Booking {
