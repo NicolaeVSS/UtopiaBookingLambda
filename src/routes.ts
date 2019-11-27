@@ -4,6 +4,7 @@ import {FlightPathController} from "./controller/FlightPathController"
 import { FlightController } from "./controller/FlightController";
 import { TicketController } from "./controller/TicketController";
 import { BookingController } from "./controller/BookingController";
+import { AirportController } from "./controller/AirportController";
 
 export const Routes = [{
     // USER MAPPINGS
@@ -45,6 +46,26 @@ export const Routes = [{
     method: "delete",
     route: "/cardInfo/:cardNumber",
     controller: CardInfoController,
+    action: "remove"
+}, { // AIRPORT MAPPINGS
+    method: "get",
+    route: "/airport/:airportCode",
+    controller: AirportController,
+    action: "one"
+}, {
+    method: "get",
+    route: "/airport",
+    controller: AirportController,
+    action: "all"
+}, {
+    method: "post",
+    route: "/airport",
+    controller: AirportController,
+    action: "save"
+}, {
+    method: "delete",
+    route: "/airport/:airportCode",
+    controller: AirportController,
     action: "remove"
 }, { // FLIGHTPATH MAPPINGS
     method: "get",

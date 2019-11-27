@@ -11,7 +11,18 @@ export class AirportController {
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        return this.airportRepository.findOne(request.params.id);
+        let airportPromise = this.airportRepository.findOne();
+
+        airportPromise.catch((err)=>{
+            response.status(404).json("not found");
+        });
+
+        airportPromise.then((res) => {
+            console.log(res)
+            response.status(200).json("found")
+        })
+
+        return response;
     }
 
     async save(request: Request, response: Response, next: NextFunction) {

@@ -16,6 +16,6 @@ export class Booking {
     isPaid: number;
 
     @CreateDateColumn({ type: 'datetime', default: () => 'LOCALTIMESTAMP' })
-    createDate: string;
+    bookDate: string;
 
 }
