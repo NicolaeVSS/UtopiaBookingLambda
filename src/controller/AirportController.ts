@@ -27,6 +27,7 @@ export class AirportController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
+        
         return this.airportRepository.findOneOrFail(request.params.airportCode)
         .then((resolve) => {
             this.airportRepository.remove(resolve);
