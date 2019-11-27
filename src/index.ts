@@ -34,27 +34,13 @@ createConnection().then(async connection => {
     app.listen(3000);
 
     // insert new users for test
-    await connection.manager.save(connection.manager.create(CardInfo, {
-        cardNumber:"1111",
-        expirationDate: "1111-11-11",
-        cvv: 1111,
-        cardHolderName: "1111"
-    }));
+    // await connection.manager.save(connection.manager.create(CardInfo, {
+    //     cardNumber:"1111",
+    //     expirationDate: "1111-11-11",
+    //     cvv: 1111,
+    //     cardHolderName: "1111"
+    // }));
 
-    await connection.manager.save(connection.manager.create(User, {
-        cardInfo:{
-            cardNumber:"1111",
-            expirationDate: "1111-11-11",
-            cvv: 1111,
-            cardHolderName: "1111",
-        },
-        userFirstName: "Timber",
-        userLastName: "Saw",
-        address: "1234 road",
-        phone:"1234567890",
-        email:"booooooo@gmail.com"
-    }));
-
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
+    console.log("Express server has started on port 3000. Open http://localhost:3000/user to see results");
 
 }).catch(error => console.log(error));

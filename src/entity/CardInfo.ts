@@ -5,7 +5,6 @@ import { User } from '../entity/User'
 export class CardInfo {
 
     @PrimaryColumn({length: 16, nullable:false})
-    @JoinColumn()
     cardNumber: string;
 
     @Column({type:'date'})
@@ -17,6 +16,7 @@ export class CardInfo {
     @Column({length: 45})
     cardHolderName: string;
     
+    // one card info for many users
     @OneToMany(type => User, user => user.cardInfo, {onDelete:'CASCADE',onUpdate:'CASCADE'})
     users: User[];
 }
