@@ -1,4 +1,4 @@
-const process = require('process');
+import process = require('process');
 const host = process.env.SPRING_DATASOURCE_URL;
 const username = process.env.SPRING_DATASOURCE_USERNAME;
 const password = process.env.SPRING_DATASOURCE_PASSWORD;
@@ -9,10 +9,9 @@ module.exports = {
   "port": 3306,
   username,
   password,
-  "database": "utopiaORM",
+  "database": "utopia",
   "synchronize": false,
   "logging": false,
-  "dateStrings": true,
   "entities": ["src/entity/**/*.ts"],
   "migrations": ["/src/migration/**/*.ts"],
   "subscribers": ["/src/subscriber/**/*.ts"],

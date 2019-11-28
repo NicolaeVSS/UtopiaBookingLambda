@@ -1,21 +1,42 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne, CreateDateColumn} from "typeorm";
-import { User } from "./User";
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
+import {User} from "./User";
+import {Ticket} from "./Ticket";
 
-@Entity({name:'booking'})
+
+@Entity("booking" ,{schema:"utopia" } )
+@Index("userId_idx",["user",])
 export class Booking {
 
-    @PrimaryGeneratedColumn()
-    bookingId: number;
+    @PrimaryGeneratedColumn({
+        type:"int", 
+        name:"bookingId"
+        })
+    bookingId:number;
+        
 
-    // many bookings for one user
-    @ManyToOne(type => User, user => user.userId, {eager:true, onDelete:'CASCADE',onUpdate:'CASCADE'})
-    @JoinColumn({ name: "userId" })
-    user: User;
+   
+    @ManyToOne(()=>User, (user: User)=>user.bookings,{  nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @JoinColumn({ name:'userId'})
+    user:User | null;
 
-    @Column({width:1})
-    isPaid: number;
 
-    @CreateDateColumn({ type: 'datetime', default: () => 'LOCALTIMESTAMP' })
-    bookDate: string;
+    @Column("tinyint",{ 
+        nullable:false,
+        default: () => "'0'",
+        name:"isPaid"
+        })
+    isPaid:number;
+        
 
+    @Column("datetime",{ 
+        nullable:true,
+        name:"bookDate"
+        })
+    bookDate:Date | null;
+        
+
+   
+    @OneToMany(()=>Ticket, (ticket: Ticket)=>ticket.booking,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
+    tickets:Ticket[];
+    
 }

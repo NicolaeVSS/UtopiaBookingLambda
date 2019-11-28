@@ -1,24 +1,34 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne} from "typeorm";
-import { Airport } from "./Airport";
-import { Flight } from "./Flight";
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
+import {Airport} from "./Airport";
+import {Flight} from "./Flight";
 
-@Entity({name:'flightPath'})
+
+@Entity("flightPath" ,{schema:"utopia" } )
+@Index("airportId_idx",["srcAirport",])
+@Index("airportId_idx1",["destAirport",])
 export class FlightPath {
 
-    @PrimaryGeneratedColumn()
-    flightPathId: number;
+    @PrimaryGeneratedColumn({
+        type:"int", 
+        name:"flightPathId"
+        })
+    flightPathId:number;
+        
 
-    // many airports for one flight path
-    @ManyToOne(type => Airport, airport => airport.airportCode, {eager:true, onDelete:'CASCADE',onUpdate:'CASCADE'})
-    @JoinColumn({ name: "srcAirport" })
-    srcAirport: Airport;
+   
+    @ManyToOne(()=>Airport, (airport: Airport)=>airport.flightPaths2,{  nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @JoinColumn({ name:'srcAirport'})
+    srcAirport:Airport | null;
 
-    // many airports for one flight path
-    @ManyToOne(type => Airport, airport => airport.airportCode, {eager:true, onDelete:'CASCADE',onUpdate:'CASCADE'})
-    @JoinColumn({ name: "destAirport" })
-    destAirport: Airport;
 
-    // one flightpath for many flights
-    @OneToMany(type => Flight, flights => flights.flightId, {onDelete:'CASCADE',onUpdate:'CASCADE'})
-    flights: Flight[];
+   
+    @ManyToOne(()=>Airport, (airport: Airport)=>airport.flightPaths,{  nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @JoinColumn({ name:'destAirport'})
+    destAirport:Airport | null;
+
+
+   
+    @OneToMany(()=>Flight, (flight: Flight)=>flight.flightPath,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
+    flights:Flight[];
+    
 }
