@@ -44,7 +44,7 @@ export class Flight {
         
 
    
-    @ManyToOne(()=>FlightPath, (flightPath: FlightPath)=>flightPath.flights,{  nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @ManyToOne(()=>FlightPath, (flightPath: FlightPath)=>flightPath.flights,{eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'flightPathId'})
     flightPath:FlightPath | null;
 

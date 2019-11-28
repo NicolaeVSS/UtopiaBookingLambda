@@ -16,15 +16,15 @@ export class FlightPath {
         
 
    
-    @ManyToOne(()=>Airport, (airport: Airport)=>airport.flightPaths2,{  nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @ManyToOne(()=>Airport, (airport: Airport)=>airport.flightPaths2,{eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'srcAirport'})
-    srcAirport:Airport | null;
+    srcAirport:Airport;
 
 
    
-    @ManyToOne(()=>Airport, (airport: Airport)=>airport.flightPaths,{  nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @ManyToOne(()=>Airport, (airport: Airport)=>airport.flightPaths,{eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'destAirport'})
-    destAirport:Airport | null;
+    destAirport:Airport;
 
 
    

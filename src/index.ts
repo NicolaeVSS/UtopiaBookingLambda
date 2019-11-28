@@ -33,14 +33,6 @@ createConnection().then(async connection => {
     // start express server
     app.listen(3000);
 
-    // insert new users for test
-    // await connection.manager.save(connection.manager.create(CardInfo, {
-    //     cardNumber:"1111",
-    //     expirationDate: "1111-11-11",
-    //     cvv: 1111,
-    //     cardHolderName: "1111"
-    // }));
-
     console.log("Express server has started on port 3000. Open http://localhost:3000 to see results");
 
 }).catch(error => console.log(error));

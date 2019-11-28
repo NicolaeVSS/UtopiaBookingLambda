@@ -16,7 +16,7 @@ export class User {
         
 
    
-    @ManyToOne(()=>CardInfo, (cardInfo: CardInfo)=>cardInfo.users,{  nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @ManyToOne(()=>CardInfo, (cardInfo: CardInfo)=>cardInfo.users,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'cardNumber'})
     cardNumber:CardInfo | null;
 

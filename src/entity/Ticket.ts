@@ -17,13 +17,13 @@ export class Ticket {
         
 
    
-    @ManyToOne(()=>Flight, (flight: Flight)=>flight.tickets,{  nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @ManyToOne(()=>Flight, (flight: Flight)=>flight.tickets,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'flightId'})
     flight:Flight | null;
 
 
    
-    @ManyToOne(()=>Booking, (booking: Booking)=>booking.tickets,{  nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @ManyToOne(()=>Booking, (booking: Booking)=>booking.tickets,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'bookingId'})
     booking:Booking | null;
 
