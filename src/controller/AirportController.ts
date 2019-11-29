@@ -1,6 +1,7 @@
 import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Airport} from "../entity/Airport";
+import {isFalsey} from "../helper/Helper"
 
 export class AirportController {
 
@@ -18,7 +19,6 @@ export class AirportController {
             response.status(200).json(resolve);
         })
         .catch((reject) => {
-            // console.log(reject);
             response.status(404).json();
         });
     }
@@ -27,7 +27,7 @@ export class AirportController {
 
         let airport: Airport = await request.body;
 
-        if(!airport.airportCode){
+        if(isFalsey(airport)){
             return response.status(400).json();
         }
         else{
@@ -36,7 +36,6 @@ export class AirportController {
                 response.status(201).json(resolve);
             })
             .catch((reject) => {
-                // console.log("PROMISE REJECTED:\n" + reject);
                 response.status(400).json();
             }));
         }
@@ -50,7 +49,6 @@ export class AirportController {
             response.status(204).json();
         })
         .catch((reject) => {
-            // console.log(reject);
             response.status(404).json();
         });
     }
