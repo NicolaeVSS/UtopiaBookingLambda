@@ -1,29 +1,59 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
 import {CardInfo} from "./CardInfo";
+import {Booking} from "./Booking";
 
-@Entity()
+
+@Entity("user" ,{schema:"utopia" } )
+@Index("userId_UNIQUE",["userId",],{unique:true})
+@Index("cardNumber_idx",["cardNumber",])
 export class User {
 
-    @PrimaryGeneratedColumn()
-    userId: number;
+    @PrimaryGeneratedColumn({
+        type:"int", 
+        name:"userId"
+        })
+    userId:number;
 
-    @ManyToOne(type => CardInfo, cardInfo => cardInfo.users, {eager:true, onDelete:'CASCADE',onUpdate:'CASCADE'})
-    @JoinColumn({ name: "cardNumber" })
-    cardInfo: CardInfo;
+    @ManyToOne(()=>CardInfo, (cardInfo: CardInfo)=>cardInfo.users,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @JoinColumn({ name:'cardNumber'})
+    cardNumber:CardInfo | null;
 
-    @Column({length: 45})
-    userFirstName: string;
-
-    @Column({length: 45})
-    userLastName: string;
-
-    @Column({length: 45})
-    address: string;
-
-    @Column({length: 45})
-    phone: string;
-
-    @Column({length: 45})
-    email: string;
-
+    @Column("varchar",{ 
+        nullable:false,
+        length:45,
+        name:"userFirstName"
+        })
+    userFirstName:string;
+        
+    @Column("varchar",{ 
+        nullable:false,
+        length:45,
+        name:"userLastName"
+        })
+    userLastName:string;
+        
+    @Column("varchar",{ 
+        nullable:true,
+        length:45,
+        name:"address"
+        })
+    address:string | null;
+        
+    @Column("varchar",{ 
+        nullable:true,
+        length:45,
+        name:"phone"
+        })
+    phone:string | null;
+        
+    @Column("varchar",{ 
+        nullable:false,
+        length:45,
+        name:"email"
+        })
+    email:string;
+        
+    @OneToMany(()=>Booking, (booking: Booking)=>booking.user,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
+    bookings:Booking[];
+    
 }

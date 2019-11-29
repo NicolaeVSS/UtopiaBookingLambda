@@ -2,11 +2,9 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 import * as express from "express";
 import * as bodyParser from "body-parser";
+// import * as cors from "cors";
 import {Request, Response} from "express";
 import {Routes} from "./routes";
-import {User} from "./entity/User";
-import { connect } from "net";
-import { CardInfo } from "./entity/CardInfo";
 
 createConnection().then(async connection => {
 
@@ -20,41 +18,35 @@ createConnection().then(async connection => {
             const result = (new (route.controller as any))[route.action](req, res, next);
             if (result instanceof Promise) {
                 result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+                result.catch(reject => {console.log(reject)})
 
             } else if (result !== null && result !== undefined) {
                 res.json(result);
             }
+
+            // ORIGINAL CODE
+            // if (result instanceof Promise) {
+            //     result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+
+            // } else if (result !== null && result !== undefined) {
+            //     res.json(result);
+            // }
         });
     });
 
-    // setup express app here
-    // ...
+    // setup express here
+
+    // setup cors here
+    // const options:cors.CorsOptions = {
+    //     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+    //     credentials: true,
+    //     methods: "GET,OPTIONS,PUT,POST,DELETE"
+    // };
+    // app.use(cors(options))
 
     // start express server
     app.listen(3000);
 
-    // insert new users for test
-    await connection.manager.save(connection.manager.create(CardInfo, {
-        cardNumber:"1111",
-        expirationDate: "1111-11-11",
-        cvv: 1111,
-        cardHolderName: "1111"
-    }));
-
-    await connection.manager.save(connection.manager.create(User, {
-        cardInfo:{
-            cardNumber:"1111",
-            expirationDate: "1111-11-11",
-            cvv: 1111,
-            cardHolderName: "1111",
-        },
-        userFirstName: "Timber",
-        userLastName: "Saw",
-        address: "1234 road",
-        phone:"1234567890",
-        email:"booooooo@gmail.com"
-    }));
-
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
+    console.log("Express server has started on port 3000. Open http://localhost:3000 to see results");
 
 }).catch(error => console.log(error));

@@ -1,17 +1,17 @@
 import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
-import {User} from "../entity/User";
+import {Flight} from "../entity/Flight";
 
-export class UserController {
+export class FlightController {
 
-    private userRepository = getRepository(User);
+    private flightRepository = getRepository(Flight);
 
     async all(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.find();
+        return this.flightRepository.find();
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.findOneOrFail(request.params.userId)
+        return this.flightRepository.findOneOrFail(request.params.flightId)
         .then((resolve) => {
             response.status(200).json(resolve);
         })
@@ -21,12 +21,12 @@ export class UserController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.save(request.body);
+        return this.flightRepository.save(request.body);
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.userRepository.findOne(request.params.id);
-        await this.userRepository.remove(userToRemove);
+        let flightToRemove = await this.flightRepository.findOne(request.params.id);
+        await this.flightRepository.remove(flightToRemove);
     }
 
 }
