@@ -1,6 +1,6 @@
-import {UserController} from "./controller/UserController";
-import {CardInfoController} from "./controller/CardInfoController";
-import {FlightPathController} from "./controller/FlightPathController"
+import { UserController } from "./controller/UserController";
+import { CardInfoController } from "./controller/CardInfoController";
+import { FlightPathController } from "./controller/FlightPathController"
 import { FlightController } from "./controller/FlightController";
 import { TicketController } from "./controller/TicketController";
 import { BookingController } from "./controller/BookingController";

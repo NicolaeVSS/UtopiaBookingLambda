@@ -13,13 +13,10 @@ export class User {
         name:"userId"
         })
     userId:number;
-        
 
-   
     @ManyToOne(()=>CardInfo, (cardInfo: CardInfo)=>cardInfo.users,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'cardNumber'})
     cardNumber:CardInfo | null;
-
 
     @Column("varchar",{ 
         nullable:false,
@@ -28,7 +25,6 @@ export class User {
         })
     userFirstName:string;
         
-
     @Column("varchar",{ 
         nullable:false,
         length:45,
@@ -36,7 +32,6 @@ export class User {
         })
     userLastName:string;
         
-
     @Column("varchar",{ 
         nullable:true,
         length:45,
@@ -44,7 +39,6 @@ export class User {
         })
     address:string | null;
         
-
     @Column("varchar",{ 
         nullable:true,
         length:45,
@@ -52,7 +46,6 @@ export class User {
         })
     phone:string | null;
         
-
     @Column("varchar",{ 
         nullable:false,
         length:45,
@@ -60,8 +53,6 @@ export class User {
         })
     email:string;
         
-
-   
     @OneToMany(()=>Booking, (booking: Booking)=>booking.user,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
     bookings:Booking[];
     

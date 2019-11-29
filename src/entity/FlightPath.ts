@@ -13,20 +13,14 @@ export class FlightPath {
         name:"flightPathId"
         })
     flightPathId:number;
-        
-
    
     @ManyToOne(()=>Airport, (airport: Airport)=>airport.flightPaths2,{eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'srcAirport'})
     srcAirport:Airport;
-
-
    
     @ManyToOne(()=>Airport, (airport: Airport)=>airport.flightPaths,{eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'destAirport'})
     destAirport:Airport;
-
-
    
     @OneToMany(()=>Flight, (flight: Flight)=>flight.flightPath,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
     flights:Flight[];

@@ -12,21 +12,18 @@ export class CardInfo {
         name:"cardNumber"
         })
     cardNumber:string;
-        
 
     @Column("date",{ 
         nullable:false,
         name:"expirationDate"
         })
     expirationDate:string;
-        
 
     @Column("int",{ 
         nullable:false,
         name:"cvv"
         })
     cvv:number;
-        
 
     @Column("varchar",{ 
         nullable:false,
@@ -34,7 +31,6 @@ export class CardInfo {
         name:"cardHolderName"
         })
     cardHolderName:string;
-        
 
    
     @OneToMany(()=>User, (user: User)=>user.cardNumber,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })

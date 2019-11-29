@@ -6,11 +6,12 @@ export class AirportController {
 
     private airportRepository = getRepository(Airport);
 
-    async all(request: Request, response: Response, next: NextFunction) {
+
+    async all(request: Request, response: Response, next: NextFunction){
         return this.airportRepository.find();
     }
 
-    async one(request: Request, response: Response, next: NextFunction) {
+    async one(request: Request, response: Response, next: NextFunction){
 
         return this.airportRepository.findOneOrFail(request.params.airportCode)
         .then((resolve) => {
@@ -23,7 +24,22 @@ export class AirportController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        return this.airportRepository.save(request.body);
+
+        let airport: Airport = await request.body;
+
+        if(!airport.airportCode){
+            return response.status(400).json();
+        }
+        else{
+            return (this.airportRepository.save(request.body)
+            .then((resolve) => {
+                response.status(201).json(resolve);
+            })
+            .catch((reject) => {
+                // console.log("PROMISE REJECTED:\n" + reject);
+                response.status(400).json();
+            }));
+        }
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {

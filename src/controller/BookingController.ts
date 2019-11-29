@@ -22,6 +22,8 @@ export class BookingController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
+        // const booking: Booking = request.body;
+
         return this.bookingRepository.save(request.body);
     }
 

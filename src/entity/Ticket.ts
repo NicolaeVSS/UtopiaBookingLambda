@@ -1,4 +1,4 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId, CreateDateColumn} from "typeorm";
 import {Flight} from "./Flight";
 import {Booking} from "./Booking";
 
@@ -14,27 +14,21 @@ export class Ticket {
         name:"ticketId"
         })
     ticketId:number;
-        
-
    
     @ManyToOne(()=>Flight, (flight: Flight)=>flight.tickets,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'flightId'})
-    flight:Flight | null;
-
-
+    flight:Flight;
    
     @ManyToOne(()=>Booking, (booking: Booking)=>booking.tickets,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'bookingId'})
-    booking:Booking | null;
-
+    booking:Booking;
 
     @Column("varchar",{ 
         nullable:false,
         length:45,
         name:"cost"
         })
-    cost:string;
-        
+    cost:string;      
 
     @Column("date",{ 
         nullable:false,

@@ -13,12 +13,9 @@ export class Booking {
         })
     bookingId:number;
         
-
-   
     @ManyToOne(()=>User, (user: User)=>user.bookings,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'userId'})
     user:User | null;
-
 
     @Column("tinyint",{ 
         nullable:false,
@@ -26,15 +23,12 @@ export class Booking {
         name:"isPaid"
         })
     isPaid:number;
-        
 
     @Column("datetime",{ 
-        nullable:true,
+        nullable:false,
         name:"bookDate"
         })
-    bookDate:Date | null;
-        
-
+    bookDate:Date;
    
     @OneToMany(()=>Ticket, (ticket: Ticket)=>ticket.booking,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
     tickets:Ticket[];

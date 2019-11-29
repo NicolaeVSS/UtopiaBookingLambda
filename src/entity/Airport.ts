@@ -12,7 +12,6 @@ export class Airport {
         name:"airportCode"
         })
     airportCode:string;
-        
 
     @Column("varchar",{ 
         nullable:false,
@@ -20,7 +19,6 @@ export class Airport {
         name:"airportName"
         })
     airportName:string;
-        
 
     @Column("varchar",{ 
         nullable:false,
@@ -28,21 +26,16 @@ export class Airport {
         name:"city"
         })
     city:string;
-        
 
     @Column("int",{ 
         nullable:false,
         name:"zip"
         })
     zip:number;
-        
-
    
     @OneToMany(()=>FlightPath, (flightPath: FlightPath)=>flightPath.destAirport,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
     flightPaths:FlightPath[];
     
-
-   
     @OneToMany(()=>FlightPath, (flightPath: FlightPath)=>flightPath.srcAirport,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
     flightPaths2:FlightPath[];
     
