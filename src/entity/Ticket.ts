@@ -1,24 +1,38 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne} from "typeorm";
-import { Flight } from "./Flight";
-import { Booking } from "./Booking";
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId, CreateDateColumn} from "typeorm";
+import {Flight} from "./Flight";
+import {Booking} from "./Booking";
 
-@Entity({name:'ticket'})
+
+@Entity("ticket" ,{schema:"utopia" } )
+@Index("ticketId_UNIQUE",["ticketId",],{unique:true})
+@Index("flightId_idx",["flight",])
+@Index("bookingId_idx",["booking",])
 export class Ticket {
 
-    @PrimaryGeneratedColumn()
-    ticketId: number;
+    @PrimaryGeneratedColumn({
+        type:"int", 
+        name:"ticketId"
+        })
+    ticketId:number;
+   
+    @ManyToOne(()=>Flight, (flight: Flight)=>flight.tickets,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @JoinColumn({ name:'flightId'})
+    flight:Flight;
+   
+    @ManyToOne(()=>Booking, (booking: Booking)=>booking.tickets,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @JoinColumn({ name:'bookingId'})
+    booking:Booking;
 
-    // many tickets for one flight
-    @ManyToOne(type => Flight, flight => flight.flightId, {eager:true, onDelete:'CASCADE',onUpdate:'CASCADE'})
-    @JoinColumn({ name: "flightId" })
-    flight: Flight;
+    @Column("decimal",{ 
+        nullable:false,
+        name:"cost"
+        })
+    cost:number;      
 
-    // many tickets for one booking
-    @ManyToOne(type => Booking, booking => booking.bookingId, {eager:true, onDelete:'CASCADE',onUpdate:'CASCADE'})
-    @JoinColumn({ name: "bookingId" })
-    booking: Booking;
-
-    @Column()
-    cost: number;
-
+    @Column("date",{ 
+        nullable:false,
+        name:"ticketDate"
+        })
+    ticketDate:string;
+        
 }

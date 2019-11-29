@@ -1,29 +1,42 @@
-import {Entity, Column, PrimaryColumn, OneToMany, JoinColumn} from "typeorm";
-import {FlightPath} from "../entity/FlightPath";
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
+import {FlightPath} from "./FlightPath";
 
-@Entity({name:'airport'})
+
+@Entity("airport" ,{schema:"utopia" } )
 export class Airport {
 
-    @PrimaryColumn({length: 4, nullable:false})
-    airportCode: string;
+    @Column("char",{ 
+        nullable:false,
+        primary:true,
+        length:4,
+        name:"airportCode"
+        })
+    airportCode:string;
 
-    @Column({length: 45})
-    airportName: string;
+    @Column("varchar",{ 
+        nullable:false,
+        length:45,
+        name:"airportName"
+        })
+    airportName:string;
 
-    @Column({length: 45})
-    city: string;
+    @Column("varchar",{ 
+        nullable:false,
+        length:45,
+        name:"city"
+        })
+    city:string;
 
-    @Column()
-    zip: string;
+    @Column("int",{ 
+        nullable:false,
+        name:"zip"
+        })
+    zip:number;
+   
+    @OneToMany(()=>FlightPath, (flightPath: FlightPath)=>flightPath.destAirport,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
+    flightPaths:FlightPath[];
     
-    // one airport for many flight paths
-    // TODO bad?
-    @OneToMany(type => FlightPath, (flightPath) => flightPath.srcAirport, {onDelete:'CASCADE', onUpdate:'CASCADE'})
-    destFlightPaths: FlightPath[];
+    @OneToMany(()=>FlightPath, (flightPath: FlightPath)=>flightPath.srcAirport,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
+    flightPaths2:FlightPath[];
     
-    // one airport for many flight paths
-    // TODO bad?
-    @OneToMany(type => FlightPath, (flightPath) => flightPath.destAirport, {onDelete:'CASCADE', onUpdate:'CASCADE'})
-    srcFlightPaths: FlightPath[];
-
 }

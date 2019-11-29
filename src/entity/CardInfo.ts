@@ -1,22 +1,39 @@
-import {Entity, Column, PrimaryColumn, OneToMany, JoinColumn} from "typeorm";
-import { User } from '../entity/User'
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
+import {User} from "./User";
 
-@Entity({name:'cardInfo'})
+
+@Entity("cardInfo" ,{schema:"utopia" } )
 export class CardInfo {
 
-    @PrimaryColumn({length: 16, nullable:false})
-    cardNumber: string;
+    @Column("varchar",{ 
+        nullable:false,
+        primary:true,
+        length:16,
+        name:"cardNumber"
+        })
+    cardNumber:string;
 
-    @Column({type:'date'})
-    expirationDate: string;
+    @Column("date",{ 
+        nullable:false,
+        name:"expirationDate"
+        })
+    expirationDate:string;
 
-    @Column({type:'integer', width: 4})
-    cvv: number;
+    @Column("int",{ 
+        nullable:false,
+        name:"cvv"
+        })
+    cvv:number;
 
-    @Column({length: 45})
-    cardHolderName: string;
+    @Column("varchar",{ 
+        nullable:false,
+        length:45,
+        name:"cardHolderName"
+        })
+    cardHolderName:string;
+
+   
+    @OneToMany(()=>User, (user: User)=>user.cardNumber,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
+    users:User[];
     
-    // one card info for many users
-    @OneToMany(type => User, user => user.cardInfo, {onDelete:'CASCADE',onUpdate:'CASCADE'})
-    users: User[];
 }

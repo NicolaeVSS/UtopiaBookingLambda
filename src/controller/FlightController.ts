@@ -11,7 +11,13 @@ export class FlightController {
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        return this.flightRepository.findOne(request.params.id);
+        return this.flightRepository.findOneOrFail(request.params.flightId)
+        .then((resolve) => {
+            response.status(200).json(resolve);
+        })
+        .catch((reject) => {
+            response.status(404).json();
+        });
     }
 
     async save(request: Request, response: Response, next: NextFunction) {

@@ -1,32 +1,48 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne} from "typeorm";
-import { FlightPath } from "../entity/FlightPath";
-import { Ticket } from "./Ticket";
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
+import {FlightPath} from "./FlightPath";
+import {Ticket} from "./Ticket";
 
-@Entity({name:'flight'})
+
+@Entity("flight" ,{schema:"utopia" } )
+@Index("flightPathId_idx",["flightPath",])
 export class Flight {
 
-    @PrimaryGeneratedColumn()
-    flightId: number;
+    @PrimaryGeneratedColumn({
+        type:"int", 
+        name:"flightId"
+        })
+    flightId:number;
 
-    // many flights for one flight path
-    @ManyToOne(type => FlightPath, flightPath => flightPath.flightPathId, {eager:true, onDelete:'CASCADE', onUpdate:'CASCADE'})
-    @JoinColumn({ name: "flightPathId" })
-    flightPath: FlightPath;
+    @Column("varchar",{ 
+        nullable:false,
+        length:45,
+        name:"plane"
+        })
+    plane:string;
 
-    @Column({length: 45})
-    plane: string;
+    @Column("time",{ 
+        nullable:false,
+        name:"arrivalTime"
+        })
+    arrivalTime:string;
 
-    @Column({type:'datetime'})
-    arrivalTime: string;
+    @Column("time",{ 
+        nullable:false,
+        name:"departureTime"
+        })
+    departureTime:string;
 
-    @Column({type:'datetime'})
-    departureTime: string;
-
-    @Column({type:'integer'})
-    totalSeats: number;
-
-    // one flight for many tickets
-    @OneToMany(type => Ticket, ticket => ticket.ticketId, {onDelete:'CASCADE',onUpdate:'CASCADE'})
-    tickets: Ticket[];
-
+    @Column("int",{ 
+        nullable:true,
+        name:"totalSeats"
+        })
+    totalSeats:number;
+   
+    @ManyToOne(()=>FlightPath, (flightPath: FlightPath)=>flightPath.flights,{eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
+    @JoinColumn({ name:'flightPathId'})
+    flightPath:FlightPath;
+   
+    @OneToMany(()=>Ticket, (ticket: Ticket)=>ticket.flight,{ onDelete: 'CASCADE' ,onUpdate: 'CASCADE' })
+    tickets:Ticket[];
+    
 }
