@@ -1,7 +1,6 @@
 import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Airport} from "../entity/Airport";
-import {isFalsey} from "../helper/Helper"
 
 export class AirportController {
 
@@ -25,10 +24,10 @@ export class AirportController {
 
     async save(request: Request, response: Response, next: NextFunction) {
 
-        let airport: Airport = await request.body;
+        let airport: Airport = request.body;
 
-        if(isFalsey(airport)){
-            return response.status(400).json();
+        if(!airport.airportCode){
+            return new Promise (() => response.status(400).json());
         }
         else{
             return (this.airportRepository.save(request.body)

@@ -14,20 +14,19 @@ createConnection().then(async connection => {
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-            const routes = (new (route.controller as any))[route.action](req, res, next);
-            // ATTEMPT
-            // .then((resolve) => {
-            //     resolve !== null && resolve !== undefined ? res.send(resolve) : undefined
-            // })
-            // .catch((reject) => {
-            //     console.log("\nRejected promise in index.ts:\n" + reject + "\n");
-            // });
+            const result = (new (route.controller as any))[route.action](req, res, next);
+            if (result instanceof Promise) {
+                result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+
+            } else if (result !== null && result !== undefined) {
+                res.json(result);
+            }
 
             // ORIGINAL CODE
             // if (result instanceof Promise) {
-            //     result.then(result => result !== null && result !== undefined ? res.send(result) : undefined)
-            // } 
-            // else if (result !== null && result !== undefined) {
+            //     result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+
+            // } else if (result !== null && result !== undefined) {
             //     res.json(result);
             // }
         });
