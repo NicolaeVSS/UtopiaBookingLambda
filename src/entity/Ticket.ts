@@ -23,12 +23,11 @@ export class Ticket {
     @JoinColumn({ name:'bookingId'})
     booking:Booking;
 
-    @Column("varchar",{ 
+    @Column("decimal",{ 
         nullable:false,
-        length:45,
         name:"cost"
         })
-    cost:string;      
+    cost:number;      
 
     @Column("date",{ 
         nullable:false,

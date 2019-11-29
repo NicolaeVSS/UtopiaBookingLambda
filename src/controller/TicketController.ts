@@ -11,16 +11,48 @@ export class TicketController {
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        return this.ticketRepository.findOne(request.params.id);
+        return this.ticketRepository.findOneOrFail(request.params.ticketId)
+        .then((resolve) => {
+            response.status(200).json(resolve);
+        })
+        .catch((reject) => {
+            response.status(404).json();
+        });
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        return this.ticketRepository.save(request.body);
+        let ticket: Ticket = request.body;
+        let alreadyExists: boolean;
+
+        // ticket id cannot be null or undefined or negative
+        // ticket date cannot be on or after current date
+        // ticket cost cannot be null or undefined and bust be above 0
+        // ticket must have a bookingId
+        // ticket must have a flightID
+        if( ticket.ticketId || !(ticket.ticketId > 0)|| !(new Date() < new Date(ticket.ticketDate)) || 
+            !ticket.cost || !(ticket.cost > 0)|| !ticket.booking.bookingId || !ticket.flight.flightId ){
+            return new Promise (() => response.status(400).json());
+        }
+        else{
+            return (this.ticketRepository.save(request.body)
+            .then((resolve) => {
+                response.status(201).json(resolve);
+            })
+            .catch((reject) => {
+                response.status(400).json();
+            }));
+        }
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let ticketToRemove = await this.ticketRepository.findOne(request.params.id);
-        await this.ticketRepository.remove(ticketToRemove);
+        return this.ticketRepository.findOneOrFail(request.params.ticketId)
+        .then((resolve) => {
+            this.ticketRepository.remove(resolve);
+            response.status(204).json();
+        })
+        .catch((reject) => {
+            response.status(404).json();
+        });
     }
 
 }
