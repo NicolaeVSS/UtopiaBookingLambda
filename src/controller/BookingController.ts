@@ -22,9 +22,27 @@ export class BookingController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        // const booking: Booking = request.body;
+        const booking: Booking = request.body;
 
-        return this.bookingRepository.save(request.body);
+        // bookingId must be falsy and not 0
+        // userId cannot be falsy
+        // isPaid must be 0
+        // bookDate must be within 24hrs of current date
+        if( booking.bookingId || (booking.bookingId == 0) ||
+            !booking.user.userId || booking.isPaid !== 0 ||
+            (Math.abs(new Date(booking.bookDate).getTime() - new Date().getTime())) > 8.64e+7){
+
+            return new Promise (() => response.status(400).json());
+        }
+        else{
+            return (this.bookingRepository.save(request.body)
+            .then((resolve) => {
+                response.status(201).json(resolve);
+            })
+            .catch((reject) => {
+                response.status(400).json();
+            }));
+        }
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {

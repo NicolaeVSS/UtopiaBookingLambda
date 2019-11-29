@@ -22,14 +22,13 @@ export class TicketController {
 
     async save(request: Request, response: Response, next: NextFunction) {
         let ticket: Ticket = request.body;
-        let alreadyExists: boolean;
 
-        // ticket id cannot be null or undefined or negative
+        // ticket id must be falsy and not 0
         // ticket date cannot be on or after current date
         // ticket cost cannot be null or undefined and bust be above 0
         // ticket must have a bookingId
         // ticket must have a flightID
-        if( ticket.ticketId || !(ticket.ticketId > 0)|| !(new Date() < new Date(ticket.ticketDate)) || 
+        if( ticket.ticketId || (ticket.ticketId == 0) || !(new Date() < new Date(ticket.ticketDate)) || 
             !ticket.cost || !(ticket.cost > 0)|| !ticket.booking.bookingId || !ticket.flight.flightId ){
             return new Promise (() => response.status(400).json());
         }
