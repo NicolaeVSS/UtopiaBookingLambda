@@ -51,8 +51,14 @@ export class FlightController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let flightToRemove = await this.flightRepository.findOne(request.params.id);
-        await this.flightRepository.remove(flightToRemove);
+        return this.flightRepository.findOneOrFail(request.params.id)
+        .then((resolve) => {
+            this.flightRepository.remove(resolve);
+            response.status(204).json();
+        })
+        .catch((reject) => {
+            response.status(404).json();
+        });
     }
 
 }

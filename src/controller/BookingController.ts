@@ -28,8 +28,8 @@ export class BookingController {
         // userId cannot be falsy
         // isPaid must be 0
         // bookDate must be within 24hrs of current date
-        if( booking.bookingId || (booking.bookingId == 0) ||
-            !booking.user.userId || booking.isPaid !== 0 ||
+        if( booking.bookingId || (booking.bookingId == 0) || 
+            !booking.user || !booking.user.userId || booking.isPaid !== 0 ||
             (Math.abs(new Date(booking.bookDate).getTime() - new Date().getTime())) > 8.64e+7){
 
             return new Promise (() => response.status(400).json());

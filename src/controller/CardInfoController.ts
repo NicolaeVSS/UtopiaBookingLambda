@@ -25,8 +25,14 @@ export class CardInfoController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let cardInfoToRemove = await this.cardInfoRepository.findOne(request.params.id);
-        await this.cardInfoRepository.remove(cardInfoToRemove);
+        return this.cardInfoRepository.findOneOrFail(request.params.id)
+        .then((resolve) => {
+            this.cardInfoRepository.remove(resolve);
+            response.status(204).json();
+        })
+        .catch((reject) => {
+            response.status(404).json();
+        });
     }
 
 }
