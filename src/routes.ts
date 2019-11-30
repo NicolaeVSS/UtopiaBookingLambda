@@ -102,6 +102,11 @@ export const Routes = [
         controller: FlightController,
         action: "one"
     }, {
+        method: "get",
+        route: "/flight/:srcAirport/to/:destAirport",
+        controller: FlightController,
+        action: "betweenTwoAirports"
+    }, {
         method: "post",
         route: "/flight",
         controller: FlightController,
