@@ -36,12 +36,6 @@ export class FlightController {
         });
     }
 
-    async addFlightPathObject(flights: Flight[], flightPath: FlightPath){
-        flights.forEach( (ele) => {
-            ele.flightPath = flightPath;
-        })
-    }
-
     async one(request: Request, response: Response, next: NextFunction) {
         return this.flightRepository.findOneOrFail(request.params.flightId)
         .then((resolve) => {
