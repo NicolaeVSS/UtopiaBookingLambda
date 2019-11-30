@@ -23,26 +23,8 @@ createConnection().then(async connection => {
             } else if (result !== null && result !== undefined) {
                 res.json(result);
             }
-
-            // ORIGINAL CODE
-            // if (result instanceof Promise) {
-            //     result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
-
-            // } else if (result !== null && result !== undefined) {
-            //     res.json(result);
-            // }
         });
     });
-
-    // setup express here
-
-    // setup cors here
-    // const options:cors.CorsOptions = {
-    //     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
-    //     credentials: true,
-    //     methods: "GET,OPTIONS,PUT,POST,DELETE"
-    // };
-    // app.use(cors(options))
 
     // start express server
     app.listen(3000);
