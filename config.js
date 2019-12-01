@@ -1,0 +1,8 @@
+require('dotenv').config()
+let CONFIG = {}
+
+CONFIG.DATASOURCE_URL = process.env.DATASOURCE_URL;
+CONFIG.DATASOURCE_USERNAME = process.env.DATASOURCE_USERNAME;
+CONFIG.DATASOURCE_PASSWORD = process.env.DATASOURCE_PASSWORD;
+
+export default CONFIG

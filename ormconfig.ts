@@ -1,16 +1,13 @@
-import process = require('process');
-const host = process.env.SPRING_DATASOURCE_URL;
-const username = process.env.SPRING_DATASOURCE_USERNAME;
-const password = process.env.SPRING_DATASOURCE_PASSWORD;
+import CONFIG from  './config'
 
 module.exports = {
   "type": "mysql",
-  "host": host,
+  "host": CONFIG.DATASOURCE_URL,
   "port": 3306,
-  username,
-  password,
+  "username":CONFIG.DATASOURCE_USERNAME,
+  "password":CONFIG.DATASOURCE_PASSWORD,
   "database": "utopia",
-  "synchronize": false,
+  "synchronize": false, // whether or not the orm try to create tables/columns
   "logging": false,
   "entities": ["src/entity/**/*.ts"],
   "migrations": ["/src/migration/**/*.ts"],
