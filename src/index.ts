@@ -7,7 +7,6 @@ import {Request, Response} from "express";
 import {Routes} from "./routes";
 import { Airport } from "./entity/Airport";
 import { User } from "./entity/User";
-import { CardInfo } from "./entity/CardInfo";
 import { Booking } from "./entity/Booking";
 import { Ticket } from "./entity/Ticket";
 import { Flight } from "./entity/Flight";
@@ -30,14 +29,14 @@ async function bootstrap(){
         database: CONFIG.TYPEORM_DATABASE,
         synchronize: false,
         logging: false,
-        entities : [User, CardInfo, Booking, Ticket, Flight, FlightPath, Airport]
+        entities : [User, Booking, Ticket, Flight, FlightPath, Airport]
     };
 
     const connection = await createConnection(info);
 
     app.get('/', async (req, res) => {
         console.log("health check\n");
-        return res.status(200).json({ message:"I'm alive!" + new Date() });
+        return res.status(200).json({ message:"I'm alive! " + new Date() });
     });
 
     // register express routes from defined application routes
