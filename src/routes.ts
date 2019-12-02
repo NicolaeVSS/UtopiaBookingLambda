@@ -49,28 +49,27 @@ export const Routes = [
         controller: CardInfoController,
         action: "remove"
     },
-    // { // AIRPORT MAPPINGS
-    //     method: "get",
-    //     route: "/airport/:airportCode",
-    //     controller: AirportController,
-    //     action: "one"
-    // }, 
-    {
+    { // AIRPORT MAPPINGS
+        method: "get",
+        route: "/airport/:airportCode",
+        controller: AirportController,
+        action: "one"
+    }, {
         method: "get",
         route: "/airport",
         controller: AirportController,
         action: "all"
-    }, //{
-    //     method: "post",
-    //     route: "/airport",
-    //     controller: AirportController,
-    //     action: "save"
-    // }, {
-    //     method: "delete",
-    //     route: "/airport/:airportCode",
-    //     controller: AirportController,
-    //     action: "remove"
-    // }, 
+    }, {
+        method: "post",
+        route: "/airport",
+        controller: AirportController,
+        action: "save"
+    }, {
+        method: "delete",
+        route: "/airport/:airportCode",
+        controller: AirportController,
+        action: "remove"
+    }, 
     { // FLIGHTPATH MAPPINGS
         method: "get",
         route: "/flightpath",
