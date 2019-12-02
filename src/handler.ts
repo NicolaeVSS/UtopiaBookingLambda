@@ -1,6 +1,7 @@
 const serverless = require('serverless-http');
 import bootstrap from './index';
 
+// a little janky, but it works
 let isCreated: boolean = false;
 let handler: any;
 
