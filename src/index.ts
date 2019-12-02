@@ -37,7 +37,7 @@ async function bootstrap(){
 
     app.get('/', async (req, res) => {
         console.log("health check\n");
-        return res.status(200).json({message:await connection.query(`SELECT * FROM utopia.airport`) });
+        return res.status(200).json({ message:"I'm alive!" + new Date() });
     });
 
     // register express routes from defined application routes
