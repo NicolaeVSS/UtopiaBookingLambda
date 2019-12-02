@@ -4,7 +4,6 @@ import {Booking} from "./Booking";
 
 @Entity("user" ,{schema:"utopia" } )
 @Index("userId_UNIQUE",["userId",],{unique:true})
-@Index("cardNumber_idx",["cardNumber",])
 export class User {
 
     @PrimaryGeneratedColumn({
