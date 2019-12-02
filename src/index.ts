@@ -1,19 +1,44 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
+import {createConnection, Connection, ConnectionOptions} from "typeorm";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as cors from 'cors';
 import {Request, Response} from "express";
 import {Routes} from "./routes";
+import { Airport } from "./entity/Airport";
+import { User } from "./entity/User";
+import { CardInfo } from "./entity/CardInfo";
+import { Booking } from "./entity/Booking";
+import { Ticket } from "./entity/Ticket";
+import { Flight } from "./entity/Flight";
+import { FlightPath } from "./entity/FlightPath";
+import CONFIG from '../config';
 
-
-createConnection().then(async connection => {
-
+async function bootstrap(){
     // create express app
     const app = express();
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended:true}));
     app.use(cors());
+
+    const info: ConnectionOptions = {
+        type: "mysql",
+        host: CONFIG.TYPEORM_HOST,
+        port: 3306,
+        username: CONFIG.TYPEORM_USERNAME,
+        password: CONFIG.TYPEORM_PASSWORD,
+        database: CONFIG.TYPEORM_DATABASE,
+        synchronize: false,
+        logging: false,
+        entities : [User, CardInfo, Booking, Ticket, Flight, FlightPath, Airport]
+    };
+
+    const connection = await createConnection(info);
+
+    app.get('/', async (req, res) => {
+        console.log("health check\n");
+        return res.status(200).json({message:await connection.query(`SELECT * FROM utopia.airport`) });
+    });
 
     // register express routes from defined application routes
     Routes.forEach(route => {
@@ -30,8 +55,10 @@ createConnection().then(async connection => {
     });
 
     // start express server
-    app.listen(3000);
+    // app.listen(3000);
+    // console.log("Express server has started on port 3000. Open http://localhost:3000 to see results");
 
-    console.log("Express server has started on port 3000. Open http://localhost:3000 to see results");
+    return app;
+}
 
-}).catch(error => console.log(error));
+export default bootstrap;
