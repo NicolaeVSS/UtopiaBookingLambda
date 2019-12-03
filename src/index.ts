@@ -13,7 +13,7 @@ import { Flight } from "./entity/Flight";
 import { FlightPath } from "./entity/FlightPath";
 import CONFIG from '../config';
 
-(async function bootstrap(){
+async function bootstrap(){
     // create express app
     const app = express();
     app.use(bodyParser.json());
@@ -54,10 +54,10 @@ import CONFIG from '../config';
     });
 
     // start express server
-    app.listen(3000);
-    console.log("Express server has started on port 3000. Open http://localhost:3000 to see results");
+    // app.listen(3000);
+    // console.log("Express server has started on port 3000. Open http://localhost:3000 to see results");
 
     return app;
-})();
+}
 
-// export default bootstrap;
+export default bootstrap;
