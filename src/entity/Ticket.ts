@@ -13,7 +13,7 @@ export class Ticket {
         type:"int", 
         name:"ticketId"
         })
-    ticketId:number;
+    ticketId:number | null;
    
     @ManyToOne(()=>Flight, (flight: Flight)=>flight.tickets,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'flightId'})
@@ -25,7 +25,7 @@ export class Ticket {
 
     @Column("decimal",{ 
         nullable:false,
-        name:"cost"
+        name:"cost",
         })
     cost:number;      
 

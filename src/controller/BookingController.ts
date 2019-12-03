@@ -1,6 +1,9 @@
-import {getRepository} from "typeorm";
+import {getRepository, getManager, QueryBuilder} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Booking} from "../entity/Booking";
+import { Flight } from "../entity/Flight";
+import { Ticket } from "../entity/Ticket";
+import { resolve } from "url";
 
 export class BookingController {
 
@@ -23,26 +26,75 @@ export class BookingController {
 
     async save(request: Request, response: Response, next: NextFunction) {
         const booking: Booking = request.body;
+        const flightId: number = parseInt(request.header('flightId')!);
+        const ticketCount: number = parseInt(request.header('ticketCount')!);
+        const ticketDate: Date = new Date(request.header('ticketDate')!);
+        const ticketCost: number = parseInt(request.header('ticketCost')!);
 
         // bookingId must be falsy and not 0
         // userId cannot be falsy
         // isPaid must be 0
         // bookDate must be within 24hrs of current date
+        // all header params cannot be falsey or 0
         if( booking.bookingId || (booking.bookingId == 0) || 
-            !booking.user || !booking.user.userId || booking.isPaid !== 0 ||
-            (Math.abs(new Date(booking.bookDate).getTime() - new Date().getTime())) > 8.64e+7){
-
+            !booking.user || !booking.user.userId || 
+            booking.isPaid !== 0 ||
+            (Math.abs(new Date(booking.bookDate).getTime() - new Date().getTime())) < 8.64e+7 ||
+            !flightId || flightId < 1 ||
+            !ticketCount || ticketCount < 1 ||
+            !ticketDate || !(new Date() < ticketDate) ||
+            !ticketCost || ticketCost < 1)
+        {
             return new Promise (() => response.status(400).json());
         }
-        else{
-            return (this.bookingRepository.save(request.body)
-            .then((resolve) => {
-                response.status(201).json(resolve);
-            })
-            .catch((reject) => {
-                response.status(400).json();
-            }));
-        }
+
+        // if the transaction did succeed and all tickets were made, return a 201 and the savedBooking
+        // otherwise return a 400 and nothing in the body
+        return await getManager().transaction(async transactionalEntityManager => {
+            // get the flight this booking is for
+            const selectedFlight: Flight = await transactionalEntityManager.getRepository(Flight).findOneOrFail(flightId)
+                .then(async (selectedFlight) => {
+                    return selectedFlight;
+                });
+            
+            // if the flight has insufficient seats, cancel the transcation and roll back the ticket creating
+            if(selectedFlight.totalSeats < ticketCount){
+                throw "not enough seats!";
+            }
+            // otherwise, remove the seats and save
+
+            selectedFlight.totalSeats -= ticketCount;
+            await transactionalEntityManager.getRepository(Flight).save(selectedFlight);
+            
+            console.log("saving booking")
+            // create the booking
+            const savedBooking: Booking = await transactionalEntityManager.getRepository(Booking).save(booking)
+                .then((resolve) => {
+                    return resolve;
+                });
+
+            // create the tickets
+            for(let i = 0 ; i < ticketCount; ++i){
+                const bookingTicket: Ticket = new Ticket();
+                bookingTicket.flight= selectedFlight;
+                bookingTicket.booking= savedBooking;
+                bookingTicket.cost= ticketCost;
+                bookingTicket.ticketDate= ticketDate.toISOString().slice(0, 10);
+
+                await transactionalEntityManager.getRepository(Ticket).save(bookingTicket)
+                    .then((resolve) => {
+                        return resolve;
+                    });
+            }
+
+            // once both these operations are done (via awaiting) return the saved booking
+            response.status(201).json(savedBooking);
+        
+        }).catch((reject) => {
+            // should any exception occur, the transaction will be rolled back and a 400 returned
+            console.log("FAILED BOOKING TRANSACTION:\n" + reject + "\n")
+            response.status(400).json();
+        });
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
