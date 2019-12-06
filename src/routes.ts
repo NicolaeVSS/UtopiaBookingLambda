@@ -1,5 +1,4 @@
 import { UserController } from "./controller/UserController";
-import { CardInfoController } from "./controller/CardInfoController";
 import { FlightPathController } from "./controller/FlightPathController"
 import { FlightController } from "./controller/FlightController";
 import { TicketController } from "./controller/TicketController";
@@ -27,29 +26,7 @@ export const Routes = [
         route: "/user/:id",
         controller: UserController,
         action: "remove"
-    },
-    { // CARD INFO MAPPINGS 
-        method: "get",
-        route: "/cardinfo/:cardNumber",
-        controller: CardInfoController,
-        action: "one"
-    }, {
-        method: "get",
-        route: "/cardInfo",
-        controller: CardInfoController,
-        action: "all"
-    }, {
-        method: "post",
-        route: "/cardInfo",
-        controller: CardInfoController,
-        action: "save"
-    }, {
-        method: "delete",
-        route: "/cardInfo/:cardNumber",
-        controller: CardInfoController,
-        action: "remove"
-    },
-    { // AIRPORT MAPPINGS
+    }, { // AIRPORT MAPPINGS
         method: "get",
         route: "/airport/:airportCode",
         controller: AirportController,
@@ -102,6 +79,11 @@ export const Routes = [
         controller: FlightController,
         action: "one"
     }, {
+        method: "get",
+        route: "/flight/:srcAirport/to/:destAirport",
+        controller: FlightController,
+        action: "betweenTwoAirports"
+    }, {
         method: "post",
         route: "/flight",
         controller: FlightController,
@@ -118,6 +100,11 @@ export const Routes = [
         controller: TicketController,
         action: "all"
     }, {
+        method: "get",
+        route: "/ticket/booking/:bookingId",
+        controller: TicketController,
+        action: "allByBookingId"
+    },{
         method: "get",
         route: "/ticket/:ticketId",
         controller: TicketController,

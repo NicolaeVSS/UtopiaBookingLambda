@@ -1,11 +1,9 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {CardInfo} from "./CardInfo";
+import {Column,Entity,Index,JoinColumn,ManyToOne,OneToMany,PrimaryGeneratedColumn} from "typeorm";
 import {Booking} from "./Booking";
 
 
 @Entity("user" ,{schema:"utopia" } )
 @Index("userId_UNIQUE",["userId",],{unique:true})
-@Index("cardNumber_idx",["cardNumber",])
 export class User {
 
     @PrimaryGeneratedColumn({
@@ -13,10 +11,6 @@ export class User {
         name:"userId"
         })
     userId:number;
-
-    @ManyToOne(()=>CardInfo, (cardInfo: CardInfo)=>cardInfo.users,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
-    @JoinColumn({ name:'cardNumber'})
-    cardNumber:CardInfo | null;
 
     @Column("varchar",{ 
         nullable:false,

@@ -1,6 +1,7 @@
-import {getRepository} from "typeorm";
+import { getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Flight} from "../entity/Flight";
+import { FlightPath } from "../entity/FlightPath";
 
 export class FlightController {
 
@@ -8,6 +9,31 @@ export class FlightController {
 
     async all(request: Request, response: Response, next: NextFunction) {
         return this.flightRepository.find();
+    }
+    
+    async betweenTwoAirports(request: Request, response: Response, next: NextFunction) {
+        const flightPathRepository = getRepository(FlightPath);
+
+        // find the flightPath connecting the two airport path params
+        await flightPathRepository.findOneOrFail({ where: { srcAirport: request.params.srcAirport, destAirport: request.params.destAirport } })
+        .then(async (resolve) => {
+            // then, find all flights who have that flightPathId
+            let flightList: Flight[] = await getRepository(Flight)
+                                                .createQueryBuilder("flight")
+                                                .where("flight.flightPathId = :id", {id: resolve.flightPathId})
+                                                .getMany();
+            
+            // also return the flightPath object we found earlier, front end might want it
+            flightList.forEach((ele) => {
+                ele.flightPath = resolve;
+            });
+            
+            // return the list of flights
+            return new Promise(() => response.status(200).json(flightList));
+        })
+        .catch((reject) => {
+            return new Promise(() => {response.status(404).json()});
+        });
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
@@ -25,8 +51,14 @@ export class FlightController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let flightToRemove = await this.flightRepository.findOne(request.params.id);
-        await this.flightRepository.remove(flightToRemove);
+        return this.flightRepository.findOneOrFail(request.params.id)
+        .then((resolve) => {
+            this.flightRepository.remove(resolve);
+            response.status(204).json();
+        })
+        .catch((reject) => {
+            response.status(404).json();
+        });
     }
 
 }

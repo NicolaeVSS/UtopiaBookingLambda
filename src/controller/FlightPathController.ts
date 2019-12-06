@@ -25,8 +25,14 @@ export class FlightPathController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let flightPathToRemove = await this.flightPathRepository.findOne(request.params.id);
-        await this.flightPathRepository.remove(flightPathToRemove);
+        return this.flightPathRepository.findOneOrFail(request.params.id)
+        .then((resolve) => {
+            this.flightPathRepository.remove(resolve);
+            response.status(204).json();
+        })
+        .catch((reject) => {
+            response.status(404).json();
+        });
     }
 
 }

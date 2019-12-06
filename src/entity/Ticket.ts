@@ -1,4 +1,4 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId, CreateDateColumn} from "typeorm";
+import {Column,Entity,Index,JoinColumn,ManyToOne,PrimaryGeneratedColumn} from "typeorm";
 import {Flight} from "./Flight";
 import {Booking} from "./Booking";
 
@@ -13,7 +13,7 @@ export class Ticket {
         type:"int", 
         name:"ticketId"
         })
-    ticketId:number;
+    ticketId:number | null;
    
     @ManyToOne(()=>Flight, (flight: Flight)=>flight.tickets,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'flightId'})
@@ -25,7 +25,7 @@ export class Ticket {
 
     @Column("decimal",{ 
         nullable:false,
-        name:"cost"
+        name:"cost",
         })
     cost:number;      
 
