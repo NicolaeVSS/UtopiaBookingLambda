@@ -12,6 +12,7 @@ import { Ticket } from "./entity/Ticket";
 import { Flight } from "./entity/Flight";
 import { FlightPath } from "./entity/FlightPath";
 import CONFIG from '../config';
+import { NextFunction } from "connect";
 
 async function bootstrap(){
     // create express app
@@ -19,6 +20,12 @@ async function bootstrap(){
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended:true}));
     app.use(cors());
+
+    app.use(function(req: Request, res:Response, next:NextFunction) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, flightid");
+        next();
+    });
 
     const info: ConnectionOptions = {
         type: "mysql",
@@ -29,9 +36,12 @@ async function bootstrap(){
         database: CONFIG.TYPEORM_DATABASE,
         synchronize: false,
         logging: false,
+        supportBigNumbers: true,
+        bigNumberStrings: false,
         entities : [User, Booking, Ticket, Flight, FlightPath, Airport]
     };
 
+    // register a connection to the connection pool
     const connection = await createConnection(info);
 
     app.get('/', async (req, res) => {

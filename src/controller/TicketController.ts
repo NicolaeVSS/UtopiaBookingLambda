@@ -12,6 +12,10 @@ export class TicketController {
         return this.ticketRepository.find();
     }
 
+    private allByBookingId(request: Request, response: Response, next: NextFunction){
+        return this.ticketRepository.find({where: {booking: {bookingId : request.params.bookingId} }});
+    }
+
     async one(request: Request, response: Response, next: NextFunction) {
         return this.ticketRepository.findOneOrFail(request.params.ticketId)
         .then((resolve) => {
