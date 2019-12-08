@@ -18,8 +18,8 @@ describe('FlightController API', () => {
         });
     });
 
-    it('should return healthy status', () => {
-        return chai.request(app).get('/')
+    it('should return healthy status', async () => {
+        return await chai.request(app).get('/')
         .then((result) => {
             expect(result).to.have.status(200);
             expect(result).to.be.json;
