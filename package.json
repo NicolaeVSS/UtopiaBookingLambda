@@ -4,15 +4,21 @@
    "description": "Awesome project developed with TypeORM.",
    "module": "system",
    "devDependencies": {
+      "@types/chai": "^4.2.6",
       "@types/cors": "^2.8.6",
+      "@types/mocha": "^5.2.7",
       "@types/node": "^8.0.29",
+      "chai": "^4.2.0",
+      "mocha": "^6.2.2",
+      "nyc": "^14.1.1",
       "serverless-plugin-typescript": "^1.1.9",
-      "ts-node": "3.3.0",
-      "typescript": "^3.3.3333"
+      "ts-node": "^3.3.0",
+      "typescript": "^3.7.3"
    },
    "dependencies": {
       "@types/express": "^4.17.2",
       "body-parser": "^1.18.1",
+      "chai-http": "^4.3.0",
       "cors": "^2.8.5",
       "express": "^4.15.4",
       "mysql": "^2.14.1",
@@ -23,6 +29,9 @@
       "typeorm": "0.2.20"
    },
    "scripts": {
-      "start": "ts-node src/index.ts"
+      "start": "ts-node src/index.ts",
+      "test": "mocha --exit -r ts-node/register test/**/*.test.ts",
+      "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
+      "test2": "mocha -r ./node_modules/ts-node/register test/**/*.spec.ts"
    }
 }
