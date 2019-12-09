@@ -7,4 +7,5 @@ temp/
 serverless.yml
 .env
 .serverless
-
+coverage
+.nyc_output
