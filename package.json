@@ -31,6 +31,6 @@
    "scripts": {
       "start": "ts-node src/index.ts",
       "test": "mocha --exit -r ts-node/register test/**/*.test.ts",
-      "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
+      "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
    }
 }
