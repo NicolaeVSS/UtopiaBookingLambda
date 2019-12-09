@@ -1,16 +1,53 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
+import {createConnection, Connection, ConnectionOptions} from "typeorm";
 import * as express from "express";
 import * as bodyParser from "body-parser";
-// import * as cors from "cors";
+import * as cors from 'cors';
 import {Request, Response} from "express";
 import {Routes} from "./routes";
+import { Airport } from "./entity/Airport";
+import { User } from "./entity/User";
+import { Booking } from "./entity/Booking";
+import { Ticket } from "./entity/Ticket";
+import { Flight } from "./entity/Flight";
+import { FlightPath } from "./entity/FlightPath";
+import CONFIG from '../config';
+import { NextFunction } from "connect";
 
-createConnection().then(async connection => {
-
+async function bootstrap(){
     // create express app
     const app = express();
     app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({extended:true}));
+    app.use(cors());
+
+    app.use(function(req: Request, res:Response, next:NextFunction) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, flightid");
+        next();
+    });
+
+    const info: ConnectionOptions = {
+        type: "mysql",
+        host: CONFIG.TYPEORM_HOST,
+        port: 3306,
+        username: CONFIG.TYPEORM_USERNAME,
+        password: CONFIG.TYPEORM_PASSWORD,
+        database: CONFIG.TYPEORM_DATABASE,
+        synchronize: false,
+        logging: false,
+        supportBigNumbers: true,
+        bigNumberStrings: false,
+        entities : [User, Booking, Ticket, Flight, FlightPath, Airport]
+    };
+
+    // register a connection to the connection pool
+    const connection = await createConnection(info);
+
+    app.get('/', async (req, res) => {
+        console.log("health check\n");
+        return res.status(200).json({ message:"I'm alive!"});
+    });
 
     // register express routes from defined application routes
     Routes.forEach(route => {
@@ -23,30 +60,14 @@ createConnection().then(async connection => {
             } else if (result !== null && result !== undefined) {
                 res.json(result);
             }
-
-            // ORIGINAL CODE
-            // if (result instanceof Promise) {
-            //     result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
-
-            // } else if (result !== null && result !== undefined) {
-            //     res.json(result);
-            // }
         });
     });
 
-    // setup express here
-
-    // setup cors here
-    // const options:cors.CorsOptions = {
-    //     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
-    //     credentials: true,
-    //     methods: "GET,OPTIONS,PUT,POST,DELETE"
-    // };
-    // app.use(cors(options))
-
     // start express server
-    app.listen(3000);
+    // app.listen(3000);
+    // console.log("Express server has started on port 3000. Open http://localhost:3000 to see results");
 
-    console.log("Express server has started on port 3000. Open http://localhost:3000 to see results");
+    return app;
+}
 
-}).catch(error => console.log(error));
+export default bootstrap;

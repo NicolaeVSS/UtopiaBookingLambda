@@ -1,13 +1,19 @@
-import {getRepository} from "typeorm";
+import {getRepository, getConnection, getManager} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Ticket} from "../entity/Ticket";
+import { Flight } from "../entity/Flight";
+import { resolve } from "url";
 
 export class TicketController {
-
     private ticketRepository = getRepository(Ticket);
+    // private flightRepository = getRepository(Flight);
 
     async all(request: Request, response: Response, next: NextFunction) {
         return this.ticketRepository.find();
+    }
+
+    private allByBookingId(request: Request, response: Response, next: NextFunction){
+        return this.ticketRepository.find({where: {booking: {bookingId : request.params.bookingId} }});
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
@@ -34,7 +40,7 @@ export class TicketController {
         }
         else{
             return (this.ticketRepository.save(request.body)
-            .then((resolve) => {
+            .then( async (resolve) => {
                 response.status(201).json(resolve);
             })
             .catch((reject) => {
@@ -53,5 +59,4 @@ export class TicketController {
             response.status(404).json();
         });
     }
-
 }

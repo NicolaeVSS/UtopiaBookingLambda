@@ -4,3 +4,8 @@ node_modules/
 build/
 tmp/
 temp/
+serverless.yml
+.env
+.serverless
+coverage
+.nyc_output

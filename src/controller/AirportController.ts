@@ -1,4 +1,4 @@
-import {getRepository} from "typeorm";
+import { getRepository, getConnectionManager} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Airport} from "../entity/Airport";
 
@@ -6,12 +6,12 @@ export class AirportController {
 
     private airportRepository = getRepository(Airport);
 
-
     async all(request: Request, response: Response, next: NextFunction){
         return this.airportRepository.find();
     }
 
     async one(request: Request, response: Response, next: NextFunction){
+        console.log("find one airport\n");
 
         return this.airportRepository.findOneOrFail(request.params.airportCode)
         .then((resolve) => {

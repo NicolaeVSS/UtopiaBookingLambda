@@ -25,8 +25,14 @@ export class UserController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.userRepository.findOne(request.params.id);
-        await this.userRepository.remove(userToRemove);
+        return this.userRepository.findOneOrFail(request.params.id)
+        .then((resolve) => {
+            this.userRepository.remove(resolve);
+            response.status(204).json();
+        })
+        .catch((reject) => {
+            response.status(404).json();
+        });
     }
 
 }
