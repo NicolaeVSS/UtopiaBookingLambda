@@ -1,11 +1,13 @@
-import {getRepository, getConnection, getManager} from "typeorm";
+import {getRepository, getConnection, getManager, In} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Ticket} from "../entity/Ticket";
 import { Flight } from "../entity/Flight";
 import { resolve } from "url";
+import { Booking } from "../entity/Booking";
 
 export class TicketController {
     private ticketRepository = getRepository(Ticket);
+    private bookingRepository = getRepository(Booking);
     // private flightRepository = getRepository(Flight);
 
     async all(request: Request, response: Response, next: NextFunction) {
@@ -17,9 +19,10 @@ export class TicketController {
     }
 
     private async allByUserId(request: Request, response: Response, next: NextFunction){
+        const userBookings: Booking[] = await this.bookingRepository.find({where: {user: {userId: request.params.userId}}});
+        
         return this.ticketRepository.find({
-            relations: ["booking", "booking.user"],
-            where:{booking: {user: {userId: request.params.userId}}}
+            where:{booking: In(userBookings)}
         });
     }
 
