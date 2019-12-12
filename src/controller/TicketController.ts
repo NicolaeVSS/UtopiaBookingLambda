@@ -17,7 +17,13 @@ export class TicketController {
     }
 
     async allByUserId(request: Request, response: Response, next: NextFunction){
-        return this.ticketRepository.find({where: {booking: {user : {userId: request.params.userId}}}});
+        const data = await this.ticketRepository.createQueryBuilder('ticket')
+            .innerJoinAndSelect('ticket.booking', 'booking')
+            .innerJoinAndSelect('booking.user', 'user')
+            .where('user.userId = :id', { id: request.params.userId })
+            .getMany();
+        
+        response.status(200).json(data);
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
