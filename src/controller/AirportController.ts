@@ -11,8 +11,6 @@ export class AirportController {
     }
 
     async one(request: Request, response: Response, next: NextFunction){
-        console.log("find one airport\n");
-
         return this.airportRepository.findOneOrFail(request.params.airportCode)
         .then((resolve) => {
             response.status(200).json(resolve);
