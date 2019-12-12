@@ -35,7 +35,7 @@ async function bootstrap(){
         password: CONFIG.TYPEORM_PASSWORD,
         database: CONFIG.TYPEORM_DATABASE,
         synchronize: false,
-        logging: false,
+        logging: true,
         supportBigNumbers: true,
         bigNumberStrings: false,
         entities : [User, Booking, Ticket, Flight, FlightPath, Airport]

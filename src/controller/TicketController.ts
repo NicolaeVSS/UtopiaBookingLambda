@@ -17,7 +17,6 @@ export class TicketController {
     }
 
     private allByUserId(request: Request, response: Response, next: NextFunction){
-        console.log("sent userId: " + request.params.userId + "\n")
         return this.ticketRepository.find({where: {booking: {user: {userId: request.params.userId}}}});
     }
 
