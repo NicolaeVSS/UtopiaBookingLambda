@@ -8,7 +8,6 @@ import { Booking } from "../entity/Booking";
 export class TicketController {
     private ticketRepository = getRepository(Ticket);
     private bookingRepository = getRepository(Booking);
-    // private flightRepository = getRepository(Flight);
 
     async all(request: Request, response: Response, next: NextFunction) {
         return this.ticketRepository.find();
@@ -19,11 +18,10 @@ export class TicketController {
     }
 
     private async allByUserId(request: Request, response: Response, next: NextFunction){
-        const userBookings: Booking[] = await this.bookingRepository.find({where: {user: {userId: request.params.userId}}});
-        
-        return this.ticketRepository.find({
-            where:{booking: In(userBookings)}
-        });
+        this.ticketRepository.createQueryBuilder()
+            .innerJoinAndSelect("ticket.booking", "booking")
+            .innerJoinAndSelect("booking.user", "user")
+            .getMany()
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
