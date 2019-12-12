@@ -16,20 +16,6 @@ export class TicketController {
         return this.ticketRepository.find({where: {booking: {bookingId : request.params.bookingId}}});
     }
 
-    async allByUserId(request: Request, response: Response, next: NextFunction){
-        const data = await this.ticketRepository.createQueryBuilder('ticket')
-            .innerJoinAndSelect('ticket.booking', 'booking')
-            .innerJoinAndSelect('booking.user', 'user')
-            .innerJoinAndSelect('ticket.flight', 'flight')
-            .innerJoinAndSelect('flight.flightPath', 'flightPath')
-            .innerJoinAndSelect('flightPath.srcAirport', 'srcAirport')
-            .innerJoinAndSelect('flightPath.destAirport', 'destAirport')
-            .where('user.userId = :id', { id: request.params.userId })
-            .getMany();
-        
-        response.status(200).json(data);
-    }
-
     async one(request: Request, response: Response, next: NextFunction) {
         return this.ticketRepository.findOneOrFail(request.params.ticketId)
         .then((resolve) => {
