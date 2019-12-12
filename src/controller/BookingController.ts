@@ -71,7 +71,6 @@ export class BookingController {
             selectedFlight.totalSeats -= ticketCount;
             await transactionalEntityManager.getRepository(Flight).save(selectedFlight);
             
-            console.log("saving booking")
             // create the booking
             const savedBooking: Booking = await transactionalEntityManager.getRepository(Booking).save(booking)
                 .then((resolve) => {
@@ -92,20 +91,22 @@ export class BookingController {
                     });
             }
 
-            // once both these operations are done (via awaiting) return the saved booking
+            // once these operations are done (via await) return the saved booking
             response.status(201).json(savedBooking);
         
         }).catch((reject) => {
             // should any exception occur, the transaction will be rolled back and a 400 returned
-            console.log("FAILED BOOKING TRANSACTION:\n" + reject + "\n")
+            // console.log("FAILED BOOKING TRANSACTION:\n" + reject + "\n")
             response.status(400).json();
         });
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
         return this.bookingRepository.findOneOrFail(request.params.bookingId)
-        .then((resolve) => {
-            this.bookingRepository.remove(resolve);
+        .then(async (resolve) => {
+            await this.bookingRepository.remove(resolve);
+        })
+        .then(() => {
             response.status(204).json();
         })
         .catch((reject) => {
