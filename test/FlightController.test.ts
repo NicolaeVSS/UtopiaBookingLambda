@@ -28,7 +28,7 @@ describe('FlightController API', () => {
         });
     });
 
-    it('should return array based on a flight path', async () => {
+    it('should get more than one flight', async  () => {
         // get all the flights
         flights = await chai.request(app).get('/flight')
         .then((result) => {
@@ -38,7 +38,9 @@ describe('FlightController API', () => {
             expect(result.body).to.have.lengthOf.above(1);
             return result.body
         });
+    })
 
+    it('should return array based on a flight path', async () => {
         // search by that ones src and dest airport codes
         return await chai.request(app).get(`/flight/${flights[0].flightPath.srcAirport.airportCode}/to/${flights[0].flightPath.destAirport.airportCode}`)
         .then((result) => {
