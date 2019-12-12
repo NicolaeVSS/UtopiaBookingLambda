@@ -18,8 +18,8 @@ export class TicketController {
 
     private async allByUserId(request: Request, response: Response, next: NextFunction){
         return this.ticketRepository.find({
-            relations: ["booking"],
-            where:{relations: ["user"], booking: {user: {userId: request.params.userId}}}
+            relations: ["booking", "booking.user"],
+            where:{booking: {user: {userId: request.params.userId}}}
         });
     }
 
