@@ -17,11 +17,10 @@ export class TicketController {
     }
 
     private async allByUserId(request: Request, response: Response, next: NextFunction){
-        console.log( await this.ticketRepository.findAndCount({where: {booking: {user: {userId: request.params.userId}}}}).then(res => {return res}) );
-        await this.ticketRepository.find({where: {booking: {user: {userId: request.params.userId}}}})
-            .then((resolve) => {
-                response.status(201).json(resolve);
-            });
+        return this.ticketRepository.find({
+            where:{booking: {user: {userId: request.params.userId}}},
+            relations: ["booking", "user"]
+        });
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
