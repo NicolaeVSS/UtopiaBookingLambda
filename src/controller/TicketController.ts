@@ -20,6 +20,7 @@ export class TicketController {
         const data = await this.ticketRepository.createQueryBuilder('ticket')
             .innerJoinAndSelect('ticket.booking', 'booking')
             .innerJoinAndSelect('booking.user', 'user')
+            .innerJoinAndSelect('ticket.flight', 'flight')
             .where('user.userId = :id', { id: request.params.userId })
             .getMany();
         
