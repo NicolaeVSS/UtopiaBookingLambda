@@ -15,7 +15,7 @@ export class Booking {
         
     @ManyToOne(()=>User, (user: User)=>user.bookings,{ eager:true, nullable:false,onDelete: 'CASCADE',onUpdate: 'CASCADE' })
     @JoinColumn({ name:'userId'})
-    user:User | null;
+    user:User;// | null;
 
     @Column("tinyint",{ 
         nullable:false,
