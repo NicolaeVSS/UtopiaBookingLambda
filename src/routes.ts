@@ -106,6 +106,11 @@ export const Routes = [
         action: "allByBookingId"
     },{
         method: "get",
+        route: "/ticket/:userId",
+        controller: TicketController,
+        action: "allByUserId"
+    },{
+        method: "get",
         route: "/ticket/:ticketId",
         controller: TicketController,
         action: "one"
