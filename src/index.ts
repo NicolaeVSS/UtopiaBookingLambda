@@ -45,7 +45,6 @@ async function bootstrap(){
     const connection = await createConnection(info);
 
     app.get('/', async (req, res) => {
-        console.log("health check\n");
         return res.status(200).json({ message:"I'm alive!"});
     });
 

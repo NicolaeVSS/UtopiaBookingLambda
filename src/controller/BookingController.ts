@@ -56,7 +56,6 @@ export class BookingController {
         // if the transaction did succeed and all tickets were made, return a 201 and the savedBooking
         // otherwise return a 400 and nothing in the body
         return await getManager().transaction(async transactionalEntityManager => {
-            console.log("POSTING!\n");
             // get the flight this booking is for
             const selectedFlight: Flight = await transactionalEntityManager.getRepository(Flight).findOneOrFail(flightId)
                 .then(async (selectedFlight) => {
