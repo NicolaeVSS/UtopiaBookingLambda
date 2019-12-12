@@ -16,9 +16,12 @@ export class TicketController {
         return this.ticketRepository.find({where: {booking: {bookingId : request.params.bookingId}}});
     }
 
-    private allByUserId(request: Request, response: Response, next: NextFunction){
-        console.log( this.ticketRepository.findAndCount({where: {booking: {user: {userId: request.params.userId}}}}) );
-        return this.ticketRepository.find({where: {booking: {user: {userId: request.params.userId}}}});
+    private async allByUserId(request: Request, response: Response, next: NextFunction){
+        console.log( await this.ticketRepository.findAndCount({where: {booking: {user: {userId: request.params.userId}}}}).then(res => {return res}) );
+        await this.ticketRepository.find({where: {booking: {user: {userId: request.params.userId}}}})
+            .then((resolve) => {
+                response.status(200).json(resolve);
+            });
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
