@@ -1,4 +1,4 @@
-import {getRepository, getManager, QueryBuilder} from "typeorm";
+import {getRepository, getManager, QueryBuilder, In} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Booking} from "../entity/Booking";
 import { Flight } from "../entity/Flight";
@@ -12,6 +12,19 @@ export class BookingController {
 
     async all(request: Request, response: Response, next: NextFunction) {
         return this.bookingRepository.find();
+    }
+
+    async allByUserId(request: Request, response: Response, next: NextFunction) {
+        return getRepository(User).findOneOrFail({ where: {userId: request.params.userId } })
+        .then((existingUser) => {
+            this.bookingRepository.find({ where: { user: existingUser } })
+            .then((allBookings) => {
+                response.status(200).json(allBookings);
+            });
+        })
+        .catch((reject) => {
+            response.status(404).json();
+        });
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
