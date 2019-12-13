@@ -127,6 +127,11 @@ export const Routes = [
         action: "all"
     }, {
         method: "get",
+        route: "/booking/user/:userId",
+        controller: BookingController,
+        action: "allByUserId"
+    }, {
+        method: "get",
         route: "/booking/:bookingId",
         controller: BookingController,
         action: "one"
